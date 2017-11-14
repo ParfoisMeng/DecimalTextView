@@ -1,3 +1,9 @@
+.gradle
+/local.properties
+/.idea/workspace.xml
+.DS_Store
+
+
 # Built application files
 *.apk
 *.ap_
@@ -39,6 +45,7 @@ captures/
 .idea/gradle.xml
 .idea/dictionaries
 .idea/libraries
+.idea
 
 # Keystore files
 *.jks
