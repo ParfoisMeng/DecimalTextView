@@ -17,7 +17,7 @@
 2. 添加项目依赖
 ```
 	dependencies {
-		compile 'com.github.parfoismeng:decimaltextview:0.0.1'
+		compile 'com.github.parfoismeng:decimaltextview:0.0.2'
 	}
 ```
 
