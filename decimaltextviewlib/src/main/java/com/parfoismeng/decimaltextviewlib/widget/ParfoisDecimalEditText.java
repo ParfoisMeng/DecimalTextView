@@ -5,8 +5,12 @@ import android.content.res.TypedArray;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.style.AbsoluteSizeSpan;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 
 import com.parfoismeng.decimaltextviewlib.R;
 import com.parfoismeng.decimaltextviewlib.listener.OnDecimalUpperListener;
@@ -30,10 +34,17 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
      * 默认数字符号 // "¥"
      */
     private String mSymbol = "¥"; // Currency.getInstance(Locale.getDefault()).getSymbol();
+
+    /**
+     * 数字符号的字体大小 默认与字体大小一致(-1)
+     */
+    private float mSymbolSize = 0;
+
     /**
      * 是否显示数字符号 默认true
      */
     private boolean mShowSymbol = true;
+
     /**
      * 是否显示数字分号 默认false
      */
@@ -86,7 +97,7 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
             try {
                 String symbol = attrArray.getString(R.styleable.ParfoisDecimalEditText_decimal_symbol);
                 if (symbol != null) mSymbol = symbol;
-
+                mSymbolSize = attrArray.getDimensionPixelSize(R.styleable.ParfoisDecimalEditText_decimal_symbol_size, 0);
                 mShowSymbol = attrArray.getBoolean(R.styleable.ParfoisDecimalEditText_decimal_show_symbol, true);
                 mShowCommas = attrArray.getBoolean(R.styleable.ParfoisDecimalEditText_decimal_show_commas, false);
                 mUpperDecimal = attrArray.getFloat(R.styleable.ParfoisDecimalEditText_decimal_upper, 1000000);
@@ -102,11 +113,11 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
 
         // 文本变化监听
         addTextChangedListener(new TextWatcher() {
-            double lastDecimal;
+            String lastDecimalStr;
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                lastDecimal = formatDecimal2Double(s.toString());
+                lastDecimalStr = s.toString();
             }
 
             @Override
@@ -119,17 +130,19 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
                 if (decimalDouble >= mUpperDecimal) {
                     if (null != onDecimalUpperListener) onDecimalUpperListener.onDecimalUpper();
 
-                    decimalDouble = lastDecimal;
+                    decimalDouble = formatDecimal2Double(lastDecimalStr);
                 }
 
-                String decimalString = formatDecimal2String(decimalDouble);
+                SpannableStringBuilder decimalString = (SpannableStringBuilder) formatDecimal2String(decimalDouble);
                 String inputString = s.toString();
                 if (inputString.endsWith(".") || inputString.endsWith(".0")) {
-                    decimalString += ".0";
+                    decimalString.append(".0");
                 }
                 setText(decimalString);
 
-                setSelection(Math.min(Math.max(mSymbol.length(), position), length())); // 取之前记录的光标位置与文本长度较小值 // 因为只取两位小数，最后位置输入时，记录的光标位置会超出文本长度，election会越界
+                //取之前记录的光标位置与文本长度较小值 // 因为只取两位小数，最后位置输入时，记录的光标位置会超出文本长度，election会越界
+                setSelection(Math.min(Math.max(mShowSymbol ? mSymbol.length() : 0, position), length()));
+
                 addTextChangedListener(this);
             }
 
@@ -145,10 +158,17 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
         super.onSelectionChanged(selStart, selEnd);
 
         try {
-            setSelection(Math.min(Math.max(mSymbol.length(), selStart), length()));
+            setSelection(Math.min(Math.max(mShowSymbol ? mSymbol.length() : 0, selStart), length()));
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 设置数字
+     */
+    public void setDecimalValue(double decimal) {
+        setText(formatDecimal2String(decimal));
     }
 
     /**
@@ -161,7 +181,7 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
     /**
      * 格式化数字 double2string
      */
-    private String formatDecimal2String(double decimal) {
+    private CharSequence formatDecimal2String(double decimal) {
         String decimalScaleStr = "";
         String s = mDecimalFill ? "0" : "#";
         for (int i = 0; i < mDecimalScale; i++) {
@@ -179,7 +199,14 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
             formatter.applyPattern("#0." + decimalScaleStr);
         }
         formatter.setRoundingMode(RoundingMode.DOWN);
-        return formatter.format(decimal);
+
+        SpannableStringBuilder result = new SpannableStringBuilder(formatter.format(decimal));
+        if (mShowSymbol) {
+            if (mSymbolSize == 0) mSymbolSize = getTextSize();
+            result.setSpan(new AbsoluteSizeSpan((int) mSymbolSize), 0, mSymbol.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        }
+
+        return result;
     }
 
     /**
@@ -207,12 +234,26 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
     }
 
     public void setSymbol(String symbol) {
+        double value = formatDecimal2Double(getText().toString());
         this.mSymbol = symbol;
-        setDecimalValue(getText().toString());
+        setDecimalValue(value);
     }
 
     public String getSymbol() {
         return this.mSymbol;
+    }
+
+    public void setSymbolSize(float symbolSize) {
+        setSymbolSize(symbolSize, TypedValue.COMPLEX_UNIT_SP);
+    }
+
+    public void setSymbolSize(float symbolSize, int unit) {
+        this.mSymbolSize = TypedValue.applyDimension(unit, symbolSize, getResources().getDisplayMetrics());
+        setDecimalValue(getText().toString());
+    }
+
+    public float getSymbolSize() {
+        return this.mSymbolSize;
     }
 
     public void setShowSymbol(boolean showSymbol) {
@@ -251,6 +292,7 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
 
     public void setDecimalFill(boolean decimalFill) {
         this.mDecimalFill = decimalFill;
+        setDecimalValue(getText().toString());
     }
 
     public boolean isDecimalFill() {

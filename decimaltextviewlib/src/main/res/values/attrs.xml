@@ -3,6 +3,8 @@
     <declare-styleable name="ParfoisDecimalTextView">
         <!-- 数字符号 默认¥ -->
         <attr name="decimal_symbol" format="string" />
+        <!-- 数字符号的字体大小 默认与字体大小一致(-1) -->
+        <attr name="decimal_symbol_size" format="dimension" />
         <!-- 是否显示数字符号 默认true -->
         <attr name="decimal_show_symbol" format="boolean" />
         <!-- 是否显示数字分号 默认false -->
@@ -16,6 +18,7 @@
     </declare-styleable>
     <declare-styleable name="ParfoisDecimalEditText">
         <attr name="decimal_symbol" />
+        <attr name="decimal_symbol_size" />
         <attr name="decimal_show_symbol" />
         <attr name="decimal_show_commas" />
         <attr name="decimal_upper" />

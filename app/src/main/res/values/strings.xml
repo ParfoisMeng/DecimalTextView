@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">DecimalTextView</string>
+    <string-array name="symbols">
+        <item>¥</item>
+        <item>数量：</item>
+        <item>任意字符串都可以</item>
+    </string-array>
 </resources>
