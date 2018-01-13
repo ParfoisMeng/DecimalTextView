@@ -135,7 +135,7 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
 
                 SpannableStringBuilder decimalString = (SpannableStringBuilder) formatDecimal2String(decimalDouble);
                 String inputString = s.toString();
-                if (inputString.endsWith(".") || inputString.endsWith(".0")) {
+                if (inputString.endsWith(".") /*|| inputString.endsWith(".0")*/) {
                     decimalString.append(".0");
                 }
                 setText(decimalString);
