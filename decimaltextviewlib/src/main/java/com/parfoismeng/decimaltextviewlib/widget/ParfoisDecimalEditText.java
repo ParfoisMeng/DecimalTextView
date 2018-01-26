@@ -124,23 +124,42 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 removeTextChangedListener(this);
 
-                int position = getSelectionStart(); // 记录光标位置 // setText后会丢失光标位置
-
+                //记录光标位置 //setText后会丢失光标位置
+                int position = getSelectionStart();
+                //最大值判断
                 double decimalDouble = formatDecimal2Double(s.toString());
                 if (decimalDouble >= mUpperDecimal) {
                     if (null != onDecimalUpperListener) onDecimalUpperListener.onDecimalUpper();
-
-                    decimalDouble = formatDecimal2Double(lastDecimalStr);
+                    //赋上次的值(格式化)
+                    setDecimalValue(lastDecimalStr);
+                } else {
+                    String inputString = s.toString().replace(mSymbol, "");
+                    //小数点后位数判断
+                    if (inputString.contains(".") && inputString.lastIndexOf(".") + 1 + mDecimalScale < inputString.length()) {
+                        inputString = inputString.substring(0, inputString.lastIndexOf(".") + 1 + mDecimalScale);
+                    }
+                    //开头0判断
+                    for (; ; ) {
+                        //开头是"0."或者就是"0"或者开头不是"0"，跳出循环
+                        if (inputString.startsWith("0.") || inputString.equals("0") || !inputString.startsWith("0")) {
+                            break;
+                        }
+                        if (inputString.startsWith("0") && !inputString.startsWith("0.")) {
+                            inputString = inputString.substring(1);
+                        }
+                    }
+                    //前缀符号(大小)设置
+                    SpannableStringBuilder result = new SpannableStringBuilder(inputString);
+                    if (mShowSymbol) {
+                        result.insert(0, mSymbol);
+                        if (mSymbolSize == 0) mSymbolSize = getTextSize();
+                        result.setSpan(new AbsoluteSizeSpan((int) mSymbolSize), 0, mSymbol.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                    }
+                    //赋过检值
+                    setText(result);
                 }
 
-                SpannableStringBuilder decimalString = (SpannableStringBuilder) formatDecimal2String(decimalDouble);
-                String inputString = s.toString();
-                if (inputString.endsWith(".") /*|| inputString.endsWith(".0")*/) {
-                    decimalString.append(".0");
-                }
-                setText(decimalString);
-
-                //取之前记录的光标位置与文本长度较小值 // 因为只取两位小数，最后位置输入时，记录的光标位置会超出文本长度，election会越界
+                //取之前记录的光标位置与文本长度较小值 //因为只取两位小数，最后位置输入时，记录的光标位置会超出文本长度，election会越界
                 setSelection(Math.min(Math.max(mShowSymbol ? mSymbol.length() : 0, position), length()));
 
                 addTextChangedListener(this);
@@ -148,7 +167,6 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
     }
