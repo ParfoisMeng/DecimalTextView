@@ -3,6 +3,8 @@
 
 ***API > 14***
 
+[![](https://jitpack.io/v/ParfoisMeng/DecimalTextView.svg)](https://jitpack.io/#ParfoisMeng/DecimalTextView)
+
 ----------
 
 > ####ParfoisDecimalTextView演示
@@ -11,20 +13,18 @@
 ![ParfoisDecimalEditText演示](http://img.blog.csdn.net/20171117172033611?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveW91c2hpNTIwMDAw/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 ----------
-
-1. 添加jitpack仓库
+  [![](https://jitpack.io/v/ParfoisMeng/DecimalTextView.svg)](https://jitpack.io/#ParfoisMeng/DecimalTextView)
 ```
+	// 1.添加jitpack仓库
 	allprojects {
 		repositories {
 			...
 			maven { url 'https://jitpack.io' }
 		}
 	}
-```
-2. 添加项目依赖
-```
+	// 2.添加项目依赖（last-version替换为最新版本号）
 	dependencies {
-		compile 'com.github.parfoismeng:decimaltextview:0.0.8'
+		compile 'com.github.parfoismeng:decimaltextview:last-version'
 	}
 ```
 
@@ -79,8 +79,8 @@
 ----------
 
 ###更新记录
- 5.  修复EditText输入问题 —— 0.0.8（2018.01.26）
- 4.  修复0.00.0的问题 —— 0.0.4（2018.01.13）
+ 1.  修复EditText输入问题 —— 0.0.8（2018.01.26）
+ 2.  修复0.00.0的问题 —— 0.0.4（2018.01.13）
  3.  添加数字符号可以设置字体大小 —— 0.0.3（2017.11.17）
  2.  更新README.md —— 0.0.2（2017.11.14）
- 1.  初始提交 —— 0.0.1（2017.11.13）
+ 5.  初始提交 —— 0.0.1（2017.11.13）
