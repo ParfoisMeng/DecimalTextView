@@ -11,7 +11,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import com.parfoismeng.decimaltextview.R;
-import com.parfoismeng.decimaltextviewlib.widget.ParfoisDecimalEditText;
+import com.parfoismeng.decimaltextviewlib.widget.DecimalEditText;
 
 /**
  * <pre>
@@ -23,7 +23,7 @@ import com.parfoismeng.decimaltextviewlib.widget.ParfoisDecimalEditText;
  * </pre>
  */
 public class EditTextActivity extends AppCompatActivity {
-    ParfoisDecimalEditText etDecimalFormat;
+    DecimalEditText etDecimalFormat;
 
     Spinner spinnerSymbol;
     SwitchCompat switchSymbol;
@@ -51,6 +51,7 @@ public class EditTextActivity extends AppCompatActivity {
         spinnerSymbol.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // 此回调初始会调用一次，详情请自行搜索Spinner相关问题
                 String[] symbols = getResources().getStringArray(R.array.symbols);
                 etDecimalFormat.setSymbol(symbols[position]);
             }

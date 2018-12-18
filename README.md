@@ -7,10 +7,10 @@
 
 ----------
 
-> ####ParfoisDecimalTextView演示
-![ParfoisDecimalTextView演示](http://img.blog.csdn.net/20171117163714305?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveW91c2hpNTIwMDAw/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
-> ####ParfoisDecimalEditText演示
-![ParfoisDecimalEditText演示](http://img.blog.csdn.net/20171117172033611?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveW91c2hpNTIwMDAw/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+> ####DecimalTextView演示
+![DecimalTextView演示](https://github.com/ParfoisMeng/DecimalTextView/blob/master/screenshots/demo1.gif)
+> ####DecimalEditText演示
+![DecimalEditText演示](https://github.com/ParfoisMeng/DecimalTextView/blob/master/screenshots/demo2.gif)
 
 ----------
   [![](https://jitpack.io/v/ParfoisMeng/DecimalTextView.svg)](https://jitpack.io/#ParfoisMeng/DecimalTextView)
@@ -49,7 +49,7 @@
 ```
 - xml里直接引用
 ```
-	<com.parfoismeng.decimaltextviewlib.widget.ParfoisDecimalTextView
+	<com.parfoismeng.decimaltextviewlib.widget.DecimalTextView
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        app:decimal_symbol="¥"
@@ -60,7 +60,7 @@
 	        app:decimal_scale="2"
 	        app:decimal_fill_zero="false" />
 
-	<com.parfoismeng.decimaltextviewlib.widget.ParfoisDecimalEditText
+	<com.parfoismeng.decimaltextviewlib.widget.DecimalEditText
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        app:decimal_symbol="¥"
@@ -74,13 +74,14 @@
 ----------
 
 > ####Demo下载地址：[https://fir.im/sajf](https://fir.im/sajf)
-![Demo下载二维码](http://img.blog.csdn.net/20171117173428366?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveW91c2hpNTIwMDAw/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![Demo下载二维码](https://github.com/ParfoisMeng/DecimalTextView/blob/master/screenshots/qrcode.png)
 
 ----------
 
 ###更新记录
- 1.  修复EditText输入问题 —— 0.0.8（2018.01.26）
- 2.  修复0.00.0的问题 —— 0.0.4（2018.01.13）
- 3.  添加数字符号可以设置字体大小 —— 0.0.3（2017.11.17）
- 2.  更新README.md —— 0.0.2（2017.11.14）
- 5.  初始提交 —— 0.0.1（2017.11.13）
+ 1.  控件名移除“Parfois”字符，修复hint无效问题 fixbug [issues1](https://github.com/ParfoisMeng/DecimalTextView/issues/1)  ——  1.0.0（2018.12.18）
+ 2.  修复EditText输入问题 —— 0.0.8（2018.01.26）
+ 3.  修复0.00.0的问题 —— 0.0.4（2018.01.13）
+ 4.  添加数字符号可以设置字体大小 —— 0.0.3（2017.11.17）
+ 5.  更新README.md —— 0.0.2（2017.11.14）
+ 6.  初始提交 —— 0.0.1（2017.11.13）

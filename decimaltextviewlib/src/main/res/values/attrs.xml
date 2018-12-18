@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="ParfoisDecimalTextView">
+    <declare-styleable name="DecimalTextView">
         <!-- 数字符号 默认¥ -->
         <attr name="decimal_symbol" format="string" />
         <!-- 数字符号的字体大小 默认与字体大小一致(-1) -->
@@ -16,7 +16,7 @@
         <!-- 小数点后是否用0填充 默认false -->
         <attr name="decimal_fill_zero" format="boolean" />
     </declare-styleable>
-    <declare-styleable name="ParfoisDecimalEditText">
+    <declare-styleable name="DecimalEditText">
         <attr name="decimal_symbol" />
         <attr name="decimal_symbol_size" />
         <attr name="decimal_show_symbol" />

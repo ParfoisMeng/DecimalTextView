@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.parfoismeng.decimaltextviewlib.widget.ParfoisDecimalEditText
+    <com.parfoismeng.decimaltextviewlib.widget.DecimalEditText
         android:id="@+id/etDecimalFormat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:text="12345.6"
+        android:hint="hint_string"
         android:textSize="24sp" />
 
     <LinearLayout
@@ -53,8 +53,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingEnd="10dp"
-            android:paddingStart="10dp">
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp">
 
             <TextView
                 android:layout_width="wrap_content"

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.parfoismeng.decimaltextviewlib.widget.ParfoisDecimalTextView
+    <com.parfoismeng.decimaltextviewlib.widget.DecimalTextView
         android:id="@+id/tvDecimalFormat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -23,7 +23,7 @@ import java.util.Locale;
  *     version: 1.0
  * </pre>
  */
-public class ParfoisDecimalTextView extends AppCompatTextView {
+public class DecimalTextView extends AppCompatTextView {
 
     /**
      * 默认数字符号 // "¥"
@@ -56,12 +56,12 @@ public class ParfoisDecimalTextView extends AppCompatTextView {
      */
     private boolean mDecimalFill = false;
 
-    public ParfoisDecimalTextView(Context context) {
+    public DecimalTextView(Context context) {
         super(context);
         initView(context, null);
     }
 
-    public ParfoisDecimalTextView(Context context, AttributeSet attrs) {
+    public DecimalTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initView(context, attrs);
     }
@@ -72,16 +72,16 @@ public class ParfoisDecimalTextView extends AppCompatTextView {
      */
     private void initView(Context context, AttributeSet attrs) {
         if (attrs != null) {
-            final TypedArray attrArray = context.obtainStyledAttributes(attrs, R.styleable.ParfoisDecimalTextView, 0, 0);
+            final TypedArray attrArray = context.obtainStyledAttributes(attrs, R.styleable.DecimalTextView, 0, 0);
             try {
-                String symbol = attrArray.getString(R.styleable.ParfoisDecimalTextView_decimal_symbol);
+                String symbol = attrArray.getString(R.styleable.DecimalTextView_decimal_symbol);
                 if (symbol != null) mSymbol = symbol;
-                mSymbolSize = attrArray.getDimensionPixelSize(R.styleable.ParfoisDecimalTextView_decimal_symbol_size, 0);
-                mShowSymbol = attrArray.getBoolean(R.styleable.ParfoisDecimalTextView_decimal_show_symbol, true);
-                mShowCommas = attrArray.getBoolean(R.styleable.ParfoisDecimalTextView_decimal_show_commas, false);
-                mUpperDecimal = attrArray.getFloat(R.styleable.ParfoisDecimalTextView_decimal_upper, 1000000);
-                mDecimalScale = attrArray.getInteger(R.styleable.ParfoisDecimalTextView_decimal_scale, 2);
-                mDecimalFill = attrArray.getBoolean(R.styleable.ParfoisDecimalTextView_decimal_fill_zero, false);
+                mSymbolSize = attrArray.getDimensionPixelSize(R.styleable.DecimalTextView_decimal_symbol_size, 0);
+                mShowSymbol = attrArray.getBoolean(R.styleable.DecimalTextView_decimal_show_symbol, true);
+                mShowCommas = attrArray.getBoolean(R.styleable.DecimalTextView_decimal_show_commas, false);
+                mUpperDecimal = attrArray.getFloat(R.styleable.DecimalTextView_decimal_upper, 1000000);
+                mDecimalScale = attrArray.getInteger(R.styleable.DecimalTextView_decimal_scale, 2);
+                mDecimalFill = attrArray.getBoolean(R.styleable.DecimalTextView_decimal_fill_zero, false);
             } finally {
                 attrArray.recycle();
             }
@@ -97,7 +97,7 @@ public class ParfoisDecimalTextView extends AppCompatTextView {
     /**
      * 设置数字
      */
-    public void setDecimalValue(double decimal) {
+    public void setDecimalValue(Double decimal) {
         setText(formatDecimal2String(decimal));
     }
 
@@ -111,11 +111,15 @@ public class ParfoisDecimalTextView extends AppCompatTextView {
     /**
      * 格式化数字 double2string
      */
-    private CharSequence formatDecimal2String(double decimal) {
-        String decimalScaleStr = "";
+    private CharSequence formatDecimal2String(Double decimal) {
+        if (null == decimal) {
+            return null;
+        }
+
+        StringBuilder decimalScaleStr = new StringBuilder();
         String s = mDecimalFill ? "0" : "#";
         for (int i = 0; i < mDecimalScale; i++) {
-            decimalScaleStr += s;
+            decimalScaleStr.append(s);
         }
 
         DecimalFormat formatter = (DecimalFormat) DecimalFormat.getInstance(Locale.getDefault());
@@ -141,7 +145,11 @@ public class ParfoisDecimalTextView extends AppCompatTextView {
     /**
      * 格式化数字 string2double
      */
-    private double formatDecimal2Double(String decimalStr) {
+    private Double formatDecimal2Double(String decimalStr) {
+        if (null == decimalStr || "".equals(decimalStr)) {
+            return null;
+        }
+
         if (decimalStr.contains(",")) { // 移除逗号
             decimalStr = decimalStr.replace(",", "");
         }
@@ -163,7 +171,7 @@ public class ParfoisDecimalTextView extends AppCompatTextView {
     }
 
     public void setSymbol(String symbol) {
-        double value = formatDecimal2Double(getText().toString());
+        Double value = formatDecimal2Double(getText().toString());
         this.mSymbol = symbol;
         setDecimalValue(value);
     }

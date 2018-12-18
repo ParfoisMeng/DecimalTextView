@@ -28,7 +28,7 @@ import java.util.Locale;
  *     version: 1.0
  * </pre>
  */
-public class ParfoisDecimalEditText extends AppCompatEditText {
+public class DecimalEditText extends AppCompatEditText {
 
     /**
      * 默认数字符号 // "¥"
@@ -70,12 +70,12 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
      */
     private OnDecimalUpperListener onDecimalUpperListener;
 
-    public ParfoisDecimalEditText(Context context) {
+    public DecimalEditText(Context context) {
         super(context);
         initView(context, null);
     }
 
-    public ParfoisDecimalEditText(Context context, AttributeSet attrs) {
+    public DecimalEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         initView(context, attrs);
     }
@@ -93,16 +93,16 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
      */
     private void initView(Context context, AttributeSet attrs) {
         if (attrs != null) {
-            final TypedArray attrArray = context.obtainStyledAttributes(attrs, R.styleable.ParfoisDecimalEditText, 0, 0);
+            final TypedArray attrArray = context.obtainStyledAttributes(attrs, R.styleable.DecimalEditText, 0, 0);
             try {
-                String symbol = attrArray.getString(R.styleable.ParfoisDecimalEditText_decimal_symbol);
+                String symbol = attrArray.getString(R.styleable.DecimalEditText_decimal_symbol);
                 if (symbol != null) mSymbol = symbol;
-                mSymbolSize = attrArray.getDimensionPixelSize(R.styleable.ParfoisDecimalEditText_decimal_symbol_size, 0);
-                mShowSymbol = attrArray.getBoolean(R.styleable.ParfoisDecimalEditText_decimal_show_symbol, true);
-                mShowCommas = attrArray.getBoolean(R.styleable.ParfoisDecimalEditText_decimal_show_commas, false);
-                mUpperDecimal = attrArray.getFloat(R.styleable.ParfoisDecimalEditText_decimal_upper, 1000000);
-                mDecimalScale = attrArray.getInteger(R.styleable.ParfoisDecimalEditText_decimal_scale, 2);
-                mDecimalFill = attrArray.getBoolean(R.styleable.ParfoisDecimalEditText_decimal_fill_zero, false);
+                mSymbolSize = attrArray.getDimensionPixelSize(R.styleable.DecimalEditText_decimal_symbol_size, 0);
+                mShowSymbol = attrArray.getBoolean(R.styleable.DecimalEditText_decimal_show_symbol, true);
+                mShowCommas = attrArray.getBoolean(R.styleable.DecimalEditText_decimal_show_commas, false);
+                mUpperDecimal = attrArray.getFloat(R.styleable.DecimalEditText_decimal_upper, 1000000);
+                mDecimalScale = attrArray.getInteger(R.styleable.DecimalEditText_decimal_scale, 2);
+                mDecimalFill = attrArray.getBoolean(R.styleable.DecimalEditText_decimal_fill_zero, false);
             } finally {
                 attrArray.recycle();
             }
@@ -122,7 +122,10 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                removeTextChangedListener(this);
+                //如果当前text为空则直接return，不进入监听Decimal处理
+                if (null == s || "".contentEquals(s)) return;
+
+                removeTextChangedListener(this); //移除监听 //防止重复监听不断
 
                 //记录光标位置 //setText后会丢失光标位置
                 int position = getSelectionStart();
@@ -139,11 +142,8 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
                         inputString = inputString.substring(0, inputString.lastIndexOf(".") + 1 + mDecimalScale);
                     }
                     //开头0判断
-                    for (; ; ) {
+                    while (!inputString.startsWith("0.") && !inputString.equals("0") && inputString.startsWith("0")) {
                         //开头是"0."或者就是"0"或者开头不是"0"，跳出循环
-                        if (inputString.startsWith("0.") || inputString.equals("0") || !inputString.startsWith("0")) {
-                            break;
-                        }
                         if (inputString.startsWith("0") && !inputString.startsWith("0.")) {
                             inputString = inputString.substring(1);
                         }
@@ -155,14 +155,18 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
                         if (mSymbolSize == 0) mSymbolSize = getTextSize();
                         result.setSpan(new AbsoluteSizeSpan((int) mSymbolSize), 0, mSymbol.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                     }
-                    //赋过检值
-                    setText(result);
+                    //检查过检值是否为前缀并对应赋值
+                    if (mSymbol.contentEquals(result)) {
+                        setText("");
+                    } else {
+                        setText(result);
+                    }
                 }
 
                 //取之前记录的光标位置与文本长度较小值 //因为只取两位小数，最后位置输入时，记录的光标位置会超出文本长度，election会越界
                 setSelection(Math.min(Math.max(mShowSymbol ? mSymbol.length() : 0, position), length()));
 
-                addTextChangedListener(this);
+                addTextChangedListener(this); //恢复监听
             }
 
             @Override
@@ -185,7 +189,7 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
     /**
      * 设置数字
      */
-    public void setDecimalValue(double decimal) {
+    public void setDecimalValue(Double decimal) {
         setText(formatDecimal2String(decimal));
     }
 
@@ -199,11 +203,15 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
     /**
      * 格式化数字 double2string
      */
-    private CharSequence formatDecimal2String(double decimal) {
-        String decimalScaleStr = "";
+    private CharSequence formatDecimal2String(Double decimal) {
+        if (null == decimal) {
+            return null;
+        }
+
+        StringBuilder decimalScaleStr = new StringBuilder();
         String s = mDecimalFill ? "0" : "#";
         for (int i = 0; i < mDecimalScale; i++) {
-            decimalScaleStr += s;
+            decimalScaleStr.append(s);
         }
 
         DecimalFormat formatter = (DecimalFormat) DecimalFormat.getInstance(Locale.getDefault());
@@ -230,7 +238,11 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
     /**
      * 格式化数字 string2double
      */
-    private double formatDecimal2Double(String decimalStr) {
+    private Double formatDecimal2Double(String decimalStr) {
+        if (null == decimalStr || "".equals(decimalStr)) {
+            return null;
+        }
+
         if (decimalStr.contains(",")) { // 移除逗号
             decimalStr = decimalStr.replace(",", "");
         }
@@ -252,7 +264,7 @@ public class ParfoisDecimalEditText extends AppCompatEditText {
     }
 
     public void setSymbol(String symbol) {
-        double value = formatDecimal2Double(getText().toString());
+        Double value = formatDecimal2Double(getText().toString());
         this.mSymbol = symbol;
         setDecimalValue(value);
     }
