@@ -7,10 +7,9 @@
 
 ----------
 
-> ####DecimalTextView演示
-![DecimalTextView演示](https://github.com/ParfoisMeng/DecimalTextView/blob/master/screenshots/demo1.gif)
-> ####DecimalEditText演示
-![DecimalEditText演示](https://github.com/ParfoisMeng/DecimalTextView/blob/master/screenshots/demo2.gif)
+| DecimalTextView演示 | DecimalEditText演示 |
+| --- | --- |
+| <img src="https://github.com/ParfoisMeng/DecimalTextView/blob/master/screenshots/demo1.gif" width="320px"/> | <img src="https://github.com/ParfoisMeng/DecimalTextView/blob/master/screenshots/demo2.gif" width="320px"/> |
 
 ----------
   [![](https://jitpack.io/v/ParfoisMeng/DecimalTextView.svg)](https://jitpack.io/#ParfoisMeng/DecimalTextView)
